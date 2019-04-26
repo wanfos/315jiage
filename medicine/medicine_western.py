@@ -15,7 +15,7 @@ TABLE_CREATE_SQL = '''
     CREATE TABLE IF NOT EXISTS `medicine_western` (
     `id` varchar(200) NOT NULL COMMENT '主键',
     `name` varchar(200) DEFAULT '' COMMENT '产品名称|药品名称',
-    `pinyin` varchar(20) DEFAULT '' COMMENT '拼音简码',
+    `pinyin` varchar(40) DEFAULT '' COMMENT '拼音简码',
     `price_retail` decimal(20,4) DEFAULT 0 COMMENT '零售价格',
     `price_wholesale` decimal(20,4)DEFAULT 0  COMMENT '批发价格',
     `price_trend` varchar(20) DEFAULT '' COMMENT '价格趋势',

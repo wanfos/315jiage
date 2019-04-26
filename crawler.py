@@ -8,9 +8,13 @@ from selenium.common.exceptions import NoSuchElementException
 from db_connector import DBConnector
 import time
 import mysql.connector
+import platform 
 import sys
-# reload(sys)
-# sys.setdefaultencoding('utf-8') 
+import operator
+
+if operator.lt(platform.python_version(), '3'):
+    reload(sys)
+    sys.setdefaultencoding('utf-8') 
 
 class Crawler:
     # 失败重试次数
@@ -235,7 +239,7 @@ class Crawler:
         self.__extract_instructions(data)
         split_str = '：'
         for node in node_list:
-            text = node.text.strip().encode('utf-8').replace('　', ' ')
+            text = node.text.strip().encode('utf-8').decode('utf-8').replace('　', ' ')
             first_index = text.find(split_str)
             last_index = text.rfind(split_str)
             if first_index < 0:
@@ -262,8 +266,8 @@ class Crawler:
             node_list = self.driver.find_elements_by_css_selector('#tab1>ul>li')
             text_list = []
             for node in node_list:
-                text_list.append(self.driver.execute_script("return arguments[0].textContent;", node).encode('utf-8'))
-            data[self.label_table_field_dict['说明书']] = '\n'.join(text_list)
+                text_list.append(str(self.driver.execute_script("return arguments[0].textContent;", node).encode('utf-8').decode('utf-8')))
+            data[self.label_table_field_dict['说明书'.encode('utf-8').decode('utf-8')]] = '\n'.join(text_list)
         except TimeoutException:
             return False
         except NoSuchElementException:
@@ -276,12 +280,11 @@ class Crawler:
         split_str = '：'
         index = text.find(split_str)
         if index < 0:
-            return None
+            return
 
         label = text[0:index].strip()
-
         if label in self.label_table_field_dict:
-            value = text[index+len(split_str):].strip()
+            value = text[index+1:].strip()
             if self.replace_to_empty_list is not None and len(self.replace_to_empty_list) > 0:
                 for replace_str in self.replace_to_empty_list:
                     value = value.replace(replace_str, '')
@@ -342,8 +345,8 @@ class Crawler:
         results = self.conn.query_sql(sql)
         label_table_field_dict = {}
         for row in results:
-            name = row[0]
-            comment = row[1].encode('utf-8')
+            name = row[0].encode('utf-8').decode('utf-8')
+            comment = row[1].encode('utf-8').decode('utf-8')
             sub_comment_list = comment.split('|')
             for sub_comment in sub_comment_list:
                 label_table_field_dict[sub_comment] = name
