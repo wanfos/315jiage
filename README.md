@@ -3,4 +3,5 @@
 
 使用方法：
   cd medicine
+  
   python medicine_western.py
