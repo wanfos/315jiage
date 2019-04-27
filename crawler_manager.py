@@ -128,30 +128,11 @@ class CrawlerManger:
         self.__write_failed_file(the_crawler)
 
     def __create_crawler(self):
-        crawler = Crawler(self.list_base_url, self.content_base_url, self.mysql_config, self.table_name, self.data_rule)
-        crawler.ignored_href_list = self.__get_noexist_href_list()
-        crawler.replace_to_empty_list = []
-        return crawler
-
-    def __get_noexist_href_list(self):
-        file_path = os.path.join('error', "{}-noexist-href.txt".format(self.table_name))
-        if os.path.exists(file_path) == False:
-            return []
-
-        try:
-            file = open(file_path, "r")
-            href_str = file.read()
-            href_list = href_str.split('\n')
-            for i in range(len(href_list)-1,-1,-1):
-                if href_list[i] == '':
-                    href_list.pop(i)
-            return href_list
-        finally:
-            file.close()
-        return []
+        return Crawler(self.list_base_url, self.content_base_url, self.mysql_config, self.table_name, self.data_rule)
 
     def __write_failed_file(self, crawler):
         self.thread_lock.acquire()
+        self.mkdir(os.path.join('error'))
 
         if len(crawler.get_failed_page_list()) > 0:
             file = open(os.path.join('error', "{}-failed-page.txt".format(self.table_name)), "a+")
@@ -164,6 +145,14 @@ class CrawlerManger:
             file.close()
 
         self.thread_lock.release()
+
+    def mkdir(self, path):
+        path = path.strip().rstrip("\\")
+        if os.path.exists(path):
+            return
+
+        os.makedirs(path) 
+    
 
     """
     拉取失败的数据
