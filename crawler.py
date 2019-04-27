@@ -247,9 +247,9 @@ class Crawler:
 
             if first_index == last_index:
                 self.__extract_content_to_data(text, data)
-
-            for item in text.split(' '):
-                self.__extract_content_to_data(item, data)
+            else:
+                for item in text.split(' '):
+                    self.__extract_content_to_data(item, data)
 
         try:
             self.__save_data_to_db(data)
