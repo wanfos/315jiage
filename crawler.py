@@ -20,7 +20,7 @@ if operator.lt(platform.python_version(), '3'):
 
 class Crawler:
     # 失败重试次数
-    max_retry_times = 2
+    max_retry_times = 15
     # 失败重试延迟时间
     retry_delay_secs = 1
 
@@ -141,10 +141,8 @@ class Crawler:
                 retry_times += 1
                 time.sleep(Crawler.retry_delay_secs*retry_times)
             except ConnectionError:
-                time.sleep(3)
                 continue
             except Timeout:
-                time.sleep(3)
                 continue
             except:
                 continue
@@ -247,6 +245,9 @@ class Crawler:
         label = text[0:index].strip()
         if label in self.label_table_field_dict:
             value = text[index+1:].strip()
+            if label == '批准文号' and value.find(self.__encode_with_utf8('本品为处方药，须凭处方购买')) >= 0:
+                value = value.replace(self.__encode_with_utf8('本品为处方药，须凭处方购买'), '').strip()
+                data[self.label_table_field_dict[self.__encode_with_utf8('是否处方药')]] = 1
             data[self.label_table_field_dict[label]] = value
 
     """
