@@ -15,7 +15,7 @@ TABLE_CREATE_SQL = '''
     CREATE TABLE IF NOT EXISTS `medicine_chinese` (
     `id` varchar(200) NOT NULL COMMENT '主键',
     `name` varchar(200) DEFAULT '' COMMENT '产品名称|药品名称',
-    `pinyin` varchar(40) DEFAULT '' COMMENT '拼音简码',
+    `pinyin` varchar(80) DEFAULT '' COMMENT '拼音简码',
     `category` varchar(40) DEFAULT '' COMMENT '分类',
     `price_retail` decimal(20,4) DEFAULT 0 COMMENT '零售价格',
     `price_wholesale` decimal(20,4)DEFAULT 0  COMMENT '批发价格',
@@ -24,6 +24,7 @@ TABLE_CREATE_SQL = '''
     `dosage_form` varchar(500) DEFAULT '' COMMENT '剂型',
     `package_unit` varchar(20) DEFAULT '' COMMENT '包装单位',
     `approval_number` varchar(80) DEFAULT '' COMMENT '批准文号',
+    `prescription` int(1) DEFAULT 0 COMMENT '是否处方药',
     `producer` varchar(200) DEFAULT '' COMMENT '生产厂家',
     `barcode` varchar(40) DEFAULT '' COMMENT '条形码',
     `attending` varchar(512) DEFAULT '' COMMENT '主治疾病',
