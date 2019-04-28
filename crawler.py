@@ -272,7 +272,7 @@ class Crawler:
         try:
             text = html.xpath(
                 "//div[@class='show-main fl']//a")[2].xpath('string(.)')
-            text = text.replace('x-', '')
+            text = text[2:]
             data[self.label_table_field_dict[self.__encode_with_utf8('分类')]] = text
         except:
             pass
