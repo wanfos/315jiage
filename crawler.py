@@ -130,7 +130,10 @@ class Crawler:
         # 获取失败时进行重试
         while True:
             try:
-                r = requests.get(url)
+                headers = {
+                    'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE'
+                }
+                r = requests.get(url, timeout=15,headers=headers)
                 if r.status_code == 200:
                     r.encoding = 'utf-8'
                     return etree.HTML(r.text)
